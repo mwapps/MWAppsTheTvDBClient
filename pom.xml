@@ -11,8 +11,8 @@
 
 	<licenses>
 		<license>
-			<name>GNU Lesser General Public License (LGPL)</name>
-			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<name>Apache License 2.0</name>
+			<url>https://github.com/mwapps/MWAppsTheTvDBClient/blob/master/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -34,13 +34,6 @@
 	</properties>
 	
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/cz.msebera.android/httpclient -->
-		<dependency>
-			<groupId>cz.msebera.android</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.4.1.2</version>
-		</dependency>
-
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
@@ -64,19 +57,6 @@
 			<artifactId>json-lib</artifactId>
 			<version>2.4</version>
 			<classifier>jdk15</classifier>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-core</artifactId>
-		    <version>2.9.2</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-		<dependency>
-		    <groupId>com.fasterxml.jackson.core</groupId>
-		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.2</version>
 		</dependency>
 
 		<dependency>
