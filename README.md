@@ -1,6 +1,7 @@
 # MWAppsTheTvDBClient
-MWApps java client for The TVDB REST API (v2.1.2)
+MWApps java client for <a href="https://api.thetvdb.com/swagger">The TVDB REST API</a> (v2.1.2).
 
+<a href="TheTVDB.com">TheTVDB.com</a> is an open database for television show fans where everybody can modified it.
 
 Follow the example implementation:
 
@@ -27,4 +28,6 @@ try {
 
 ```
 
+## License
+Created by [Omar Manrique Zorrilla](https://www.linkedin.com/in/omargmanriquez) under Apache License 2.0
 
