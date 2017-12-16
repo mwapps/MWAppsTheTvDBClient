@@ -3,6 +3,7 @@ package com.manriqueweb.thetvdbclient;
 import java.io.IOException;
 import java.util.Date;
 
+import org.apache.commons.validator.routines.UrlValidator;
 import org.joda.time.DateTime;
 
 import com.manriqueweb.thetvdbclient.entities.ActorResponse;
@@ -286,4 +287,21 @@ public class TheTvDB {
 		
         return episodeResponse;
     }
+
+    public byte[] downloadImage(final String imageURL) throws IllegalArgumentException, TheTvDBClientException {
+    	byte[] responseImage = null;
+    	
+		if(imageURL==null)
+		    throw new IllegalArgumentException("The image url is invalid");
+		
+		final String newURL = new StringBuilder().append(TheTvDBClient.IMAGE_HOST).append(imageURL).toString();
+		
+		if(!(new UrlValidator().isValid(newURL)))
+		    throw new IllegalArgumentException("The image url is invalid");
+		
+		responseImage = this.theTvDBClient.downloadImage(newURL);
+    	
+        return responseImage;
+    }
+
 }

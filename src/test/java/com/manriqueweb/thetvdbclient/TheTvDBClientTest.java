@@ -1,11 +1,15 @@
 package com.manriqueweb.thetvdbclient;
 
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.manriqueweb.thetvdbclient.entities.ActorResponse;
@@ -31,7 +35,7 @@ public class TheTvDBClientTest {
 	
 	
     @Test
-    public void testTheTvDB() {
+    public void test01() {
 		try {
 			assertNotNull(theTvDB.getCurrentToken());
 		} catch (TheTvDBClientException e) {
@@ -40,7 +44,7 @@ public class TheTvDBClientTest {
     }
     
     @Test
-    public void testUpdates() {
+    public void test02() {
     	try {
         	UpdatesResponse response = theTvDB.updates(null, null);
 			assertNotNull(response);
@@ -52,7 +56,7 @@ public class TheTvDBClientTest {
     }
 
     @Test
-    public void testSearchSeriesByName() {
+    public void test03() {
 		try {
 			SerieResponse serieResponse = theTvDB.search("suits", null);
 			
@@ -65,7 +69,7 @@ public class TheTvDBClientTest {
     }
 
     @Test
-    public void testSearchSeriesByIMDB() {
+    public void test04() {
 		try {
 			SerieResponse serieResponse = theTvDB.searchByIMDB("tt5420376", null);
 			
@@ -77,7 +81,7 @@ public class TheTvDBClientTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testSearchSeriesNUll() {
+    public void test05() {
 
 		try {
 			theTvDB.search(null, null);
@@ -89,7 +93,7 @@ public class TheTvDBClientTest {
     }
     
     @Test
-    public void testSerieByID() {
+    public void test06() {
 		try {
 			SerieByIdResponse serieResponse = theTvDB.serieById(311954, null);
 			
@@ -101,7 +105,7 @@ public class TheTvDBClientTest {
     }
     
     @Test
-    public void testActorsSerieByID() {
+    public void test07() {
 		try {
 			ActorResponse actorResponse = theTvDB.actorsBySerieId(311954);
 			
@@ -113,7 +117,7 @@ public class TheTvDBClientTest {
     }
     
     @Test
-    public void testEpisodesBySerieByID() {
+    public void test08() {
 		try {
 			EpisodeResponse episodeResponse = theTvDB.episodesBySerieById(311954, null, null);
 			
@@ -125,7 +129,7 @@ public class TheTvDBClientTest {
     }
     
     @Test
-    public void testEpisodeByID() {
+    public void test09() {
 		try {
 			EpisodeDetailResponse episodeDetailResponse = theTvDB.episodeById(6246547, null);
 			
@@ -134,6 +138,36 @@ public class TheTvDBClientTest {
 		} catch (TheTvDBClientException e) {
 			fail(e.getMessage());
 		}
+    }
+    
+    @Test
+    public void test10(){
+		try {
+			byte[] responseBytes = theTvDB.downloadImage("graphical/311954-g3.jpg");
+			assertNotNull(responseBytes);
+			
+			byte[] responseFile = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("311954-g3.jpg"));
+			assertNotNull(responseFile);
+			
+			assertArrayEquals(responseBytes, responseFile);
+			
+		} catch (TheTvDBClientException e) {
+			fail(e.getMessage());
+		} catch (IOException e) {
+			fail(e.getMessage());
+		}
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void test11() {
+
+		try {
+			theTvDB.downloadImage("https://www.thetvdb.com/banners/graphical/311954-g3.jpg");
+			
+		} catch (TheTvDBClientException e) {
+
+		}
+
     }
 
 }
