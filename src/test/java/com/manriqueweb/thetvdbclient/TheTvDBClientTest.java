@@ -95,7 +95,7 @@ public class TheTvDBClientTest {
     @Test
     public void test06() {
 		try {
-			SerieByIdResponse serieResponse = theTvDB.serieById(311954, null);
+			SerieByIdResponse serieResponse = theTvDB.serieById((long)311954, null);
 			
 			assertNotNull(serieResponse);
 			

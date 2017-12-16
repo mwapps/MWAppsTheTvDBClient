@@ -21,16 +21,12 @@
 			<id>mwapps</id>
 			<name>Omar Manrique Zorrilla</name>
 			<email>manriquewebapps@gmail.com</email>
+			<url>https://www.linkedin.com/in/omargmanriquez</url>
 		</developer>
 	</developers>
 
 	<properties>
-		<!-- 
-		<jdk.version>1.7</jdk.version>
-		<jdk.location>/usr/lib/jvm/java-7-oracle/bin/javac</jdk.location>
-		-->
 		<jdk.version>1.8</jdk.version>
-		<jdk.location>/usr/lib/jvm/java-8-openjdk-amd64</jdk.location>
 	</properties>
 	
 	<dependencies>
@@ -90,58 +86,16 @@
 	<build>
 		<finalName>mwapps-thetvdb-client</finalName>
 		<plugins>
-
-			<!-- download source code in Eclipse, best practice -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-				</configuration>
-			</plugin>
-
 			<!-- Set a JDK compiler level -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.7.0</version>
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
 					<fork>true</fork>
-					<executable>${jdk.location}</executable>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.4.1</version>
-				<configuration>
-					<!-- get all project dependencies -->
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<!-- MainClass in mainfest make a executable jar -->
-					<archive>
-						<manifest>
-							<mainClass />
-						</manifest>
-					</archive>
-
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<!-- bind to the packaging phase -->
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

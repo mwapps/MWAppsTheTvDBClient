@@ -165,14 +165,14 @@ public class TheTvDB {
         return serieResponse;
     }
     
-    public SerieByIdResponse serieById(final Integer serieId, String languaje) throws IllegalArgumentException, TheTvDBClientException {
+    public SerieByIdResponse serieById(final Long serieId, String languaje) throws IllegalArgumentException, TheTvDBClientException {
     	SerieByIdResponse serieResponse = null;
     	
 		if(serieId==null)
 		    throw new IllegalArgumentException("serieId is null");
-		if(serieId<0)
+		if(serieId<(long)0)
 		    throw new IllegalArgumentException("serieId is less than zero");
-		if(serieId==0)
+		if(serieId==(long)0)
 		    throw new IllegalArgumentException("serieId is zero");
 
 		retrofit2.Response<SerieByIdResponse> response;
