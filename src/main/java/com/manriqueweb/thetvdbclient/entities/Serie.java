@@ -1,14 +1,16 @@
 package com.manriqueweb.thetvdbclient.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Serie {
-
-    private Integer id;
+public class Serie implements Serializable {
+	private static final long serialVersionUID = -7148298541881835279L;
+	
+	private Integer id;
     private String seriesName;
     private List<String> aliases = new ArrayList<>();
     private String banner;
@@ -204,6 +206,5 @@ public class Serie {
 		builder.append("]");
 		return builder.toString();
 	}
-    
 
 }
