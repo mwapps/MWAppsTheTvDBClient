@@ -1,7 +1,5 @@
 package com.manriqueweb.thetvdbclient.exceptions;
 
-import java.lang.Throwable;
-
 /**
  * A generic Client exception.
  */
