@@ -19,7 +19,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;;
 public class TheTvDBClient {
     public static final String API_HOST = "api.thetvdb.com";
     public static final String API_URL = "https://" + API_HOST + "/";
-    public static final String API_VERSION = "2.1.2";
+    public static final String API_VERSION = "2.2.0";
     
     public static final String IMAGE_HOST = "https://www.thetvdb.com/banners/";
 
@@ -89,7 +89,7 @@ public class TheTvDBClient {
     public TheTvDBClientAuthentication authentication() {
         return getRetrofit().create(TheTvDBClientAuthentication.class);
     }
-
+    
     /**
      * Retrieve the updates from series.
      */

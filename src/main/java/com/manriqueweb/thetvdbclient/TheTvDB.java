@@ -15,8 +15,10 @@ import com.manriqueweb.thetvdbclient.entities.SerieResponse;
 import com.manriqueweb.thetvdbclient.entities.TokenResponse;
 import com.manriqueweb.thetvdbclient.entities.UpdatesResponse;
 import com.manriqueweb.thetvdbclient.exceptions.TheTvDBClientException;
+import com.manriqueweb.thetvdbclient.ifaces.IApiResponse;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TheTvDB {
@@ -41,6 +43,7 @@ public class TheTvDB {
 		}
 
     }
+    
     /**
      * Retrieve the updates from series.
      */
@@ -81,6 +84,44 @@ public class TheTvDB {
 		return updatesResponse;
     }
 
+    public void updates(Date fromTime, Integer nDays, final IApiResponse<UpdatesResponse> mListener) throws TheTvDBClientException {
+    	if(fromTime==null)
+    		fromTime = new Date();
+    	
+        final DateTime starDateTime = new DateTime(fromTime)
+        		.withHourOfDay(0)
+            	.withMinuteOfHour(0)
+            	.withSecondOfMinute(0);
+        
+        if(nDays==null || nDays>7)
+    		nDays = 7;
+        
+        DateTime toDateTime = starDateTime.plusDays(nDays)
+        		.withHourOfDay(0)
+            	.withMinuteOfHour(0)
+            	.withSecondOfMinute(0);
+        
+    	Call<UpdatesResponse> calling = this.theTvDBClient.updates()
+			    .updates(starDateTime.getMillis()/1000, toDateTime.getMillis()/1000);
+    	
+    	calling.enqueue(new Callback<UpdatesResponse>() {
+			@Override
+			public void onResponse(Call<UpdatesResponse> call, Response<UpdatesResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<UpdatesResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
+    }
+
     public SerieResponse search(final String seriesName, String languaje) throws IllegalArgumentException, TheTvDBClientException {
     	SerieResponse serieResponse = null;
     	
@@ -107,6 +148,32 @@ public class TheTvDB {
 		}
 		
         return serieResponse;
+    }
+    
+    public void search(final String seriesName, String languaje, final IApiResponse<SerieResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(seriesName==null)
+		    throw new IllegalArgumentException("imdbID is null");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+		
+    	Call<SerieResponse> calling = this.theTvDBClient.search().searchSeriesByName(seriesName, languaje);
+    	calling.enqueue(new Callback<SerieResponse>() {
+			
+			@Override
+			public void onResponse(Call<SerieResponse> call, Response<SerieResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<SerieResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
     }
 
     public SerieResponse searchByIMDB(final String imdbID, String languaje) throws IllegalArgumentException, TheTvDBClientException  {
@@ -136,6 +203,33 @@ public class TheTvDB {
 		
         return serieResponse;
     }
+    
+    public void searchByIMDB(final String imdbID, String languaje, final IApiResponse<SerieResponse> mListener) throws IllegalArgumentException, TheTvDBClientException  {
+		if(imdbID==null)
+		    throw new IllegalArgumentException("imdbID is null");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+		
+    	Call<SerieResponse> calling = this.theTvDBClient.search().searchSeriesByIMDB(imdbID, languaje);
+    	calling.enqueue(new Callback<SerieResponse>() {
+			
+			@Override
+			public void onResponse(Call<SerieResponse> call, Response<SerieResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<SerieResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
+    }
+
 
     public SerieResponse searchByZap2itId(final String zap2itId, String languaje) throws IllegalArgumentException, TheTvDBClientException {
     	SerieResponse serieResponse = null;
@@ -163,6 +257,32 @@ public class TheTvDB {
 		}
 		
         return serieResponse;
+    }
+    
+    public void searchByZap2itId(final String zap2itId, String languaje, final IApiResponse<SerieResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(zap2itId==null)
+		    throw new IllegalArgumentException("zap2itId is null");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+    	
+    	Call<SerieResponse> calling = this.theTvDBClient.search().searchSeriesByZap2itId(zap2itId, languaje);
+    	calling.enqueue(new Callback<SerieResponse>() {
+			
+			@Override
+			public void onResponse(Call<SerieResponse> call, Response<SerieResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<SerieResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
     }
     
     public SerieByIdResponse serieById(final Long serieId, String languaje) throws IllegalArgumentException, TheTvDBClientException {
@@ -196,6 +316,35 @@ public class TheTvDB {
 		
         return serieResponse;
     }
+    
+    public void serieById(final Long serieId, String languaje, final IApiResponse<SerieByIdResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(serieId==null)
+		    throw new IllegalArgumentException("serieId is null");
+		if(serieId<(long)0)
+		    throw new IllegalArgumentException("serieId is less than zero");
+		if(serieId==(long)0)
+		    throw new IllegalArgumentException("serieId is zero");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+		
+    	Call<SerieByIdResponse> calling = this.theTvDBClient.serie().serie(serieId.intValue(), languaje);
+    	calling.enqueue(new Callback<SerieByIdResponse>() {
+			@Override
+			public void onResponse(Call<SerieByIdResponse> call, Response<SerieByIdResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<SerieByIdResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
+    }
 
     public ActorResponse actorsBySerieId(final Integer serieId) throws IllegalArgumentException, TheTvDBClientException {
     	ActorResponse actorResponse = null;
@@ -224,6 +373,34 @@ public class TheTvDB {
 		}
 		
         return actorResponse;
+    }
+    
+    public void actorsBySerieId(final Integer serieId, final IApiResponse<ActorResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(serieId==null)
+		    throw new IllegalArgumentException("serieId is null");
+		if(serieId<0)
+		    throw new IllegalArgumentException("serieId is less than zero");
+		if(serieId==0)
+		    throw new IllegalArgumentException("serieId is zero");
+    	
+    	Call<ActorResponse> calling = this.theTvDBClient.serie().actors(serieId.intValue());
+    	calling.enqueue(new Callback<ActorResponse>() {
+			
+			@Override
+			public void onResponse(Call<ActorResponse> call, Response<ActorResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<ActorResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
     }
 
     public EpisodeResponse episodesBySerieById(final Integer serieId, final Integer pageNumber, String languaje) throws IllegalArgumentException, TheTvDBClientException {
@@ -256,6 +433,37 @@ public class TheTvDB {
 		
         return episodeResponse;
     }
+    
+    public void episodesBySerieById(final Integer serieId, final Integer pageNumber, String languaje, final IApiResponse<EpisodeResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(serieId==null)
+		    throw new IllegalArgumentException("serieId is null");
+		else if(serieId<0)
+		    throw new IllegalArgumentException("serieId is less than zero");
+		else if(serieId==0)
+		    throw new IllegalArgumentException("serieId is zero");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+		
+    	Call<EpisodeResponse> calling = this.theTvDBClient.serie().episodes(serieId.intValue(), pageNumber, languaje);
+    	calling.enqueue(new Callback<EpisodeResponse>() {
+			
+			@Override
+			public void onResponse(Call<EpisodeResponse> call, Response<EpisodeResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<EpisodeResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
+		
+    }
 
     public EpisodeDetailResponse episodeById(final Integer episodeId, String languaje) throws IllegalArgumentException, TheTvDBClientException {
     	EpisodeDetailResponse episodeResponse = null;
@@ -286,6 +494,37 @@ public class TheTvDB {
 		}
 		
         return episodeResponse;
+    }
+    
+    public void episodeById(final Integer episodeId, String languaje, final IApiResponse<EpisodeDetailResponse> mListener) throws IllegalArgumentException, TheTvDBClientException {
+		if(episodeId==null)
+		    throw new IllegalArgumentException("episodeId is null");
+		else if(episodeId<0)
+		    throw new IllegalArgumentException("episodeId is less than zero");
+		else if(episodeId==0)
+		    throw new IllegalArgumentException("episodeId is zero");
+		if(languaje==null)
+			languaje = theTvDBClient.getBasicCredentials().getDefaultlanguaje();
+
+		
+    	Call<EpisodeDetailResponse> calling = this.theTvDBClient.EpisodeDetail().getEpisode(episodeId.intValue(), languaje);
+    	calling.enqueue(new Callback<EpisodeDetailResponse>() {
+			
+			@Override
+			public void onResponse(Call<EpisodeDetailResponse> call, Response<EpisodeDetailResponse> dataResponse) {
+                if(dataResponse.isSuccessful()){
+                    mListener.onResponse(dataResponse.body());
+                }else{
+                	assert dataResponse.errorBody() != null;
+                    mListener.onError(dataResponse.errorBody().toString());
+                }
+			}
+			
+			@Override
+			public void onFailure(Call<EpisodeDetailResponse> call, Throwable dataThrowable) {
+				mListener.onError(dataThrowable.getLocalizedMessage());
+			}
+		});
     }
 
     public byte[] downloadImage(final String imageURL) throws IllegalArgumentException, TheTvDBClientException {
